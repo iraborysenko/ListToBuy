@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.borysenko.listtobuy.R;
+import com.borysenko.listtobuy.dagger.screens.BoughtFragmentScreenModule;
+import com.borysenko.listtobuy.dagger.screens.DaggerBoughtFragmentScreenComponent;
+
+import javax.inject.Inject;
 
 /**
  * Created by Android Studio.
@@ -16,7 +20,10 @@ import com.borysenko.listtobuy.R;
  * Date: 31/01/19
  * Time: 20:49
  */
-public class BoughtFragment extends Fragment {
+public class BoughtFragment extends Fragment implements BoughtFragmentScreen.View{
+
+    @Inject
+    BoughtPresenter mPresenter;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -27,7 +34,9 @@ public class BoughtFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        DaggerBoughtFragmentScreenComponent.builder()
+                .boughtFragmentScreenModule(new BoughtFragmentScreenModule(this))
+                .build().inject(this);
     }
 
     @Override
