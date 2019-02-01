@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">ListToBuy</string>
     <string name="action_settings">Settings</string>
+    <string name="add_purchase">Добавление покупки</string>
+    <string name="title">Название</string>
+    <string name="price">Цена</string>
+    <string name="quantity">Количество</string>
+    <string name="enter_title">Введите название</string>
+    <string name="enter_price">Введите цену</string>
+    <string name="enter_quantity">Введите количество</string>
 </resources>
