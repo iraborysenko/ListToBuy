@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,10 @@ import android.view.ViewGroup;
 import com.borysenko.listtobuy.R;
 import com.borysenko.listtobuy.dagger.screens.DaggerPurchaseFragmentScreenComponent;
 import com.borysenko.listtobuy.dagger.screens.PurchaseFragmentScreenModule;
+import com.borysenko.listtobuy.db.Purchase;
 import com.borysenko.listtobuy.ui.add.AddActivity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -40,7 +44,7 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
         DaggerPurchaseFragmentScreenComponent.builder()
                 .purchaseFragmentScreenModule(new PurchaseFragmentScreenModule(this))
                 .build().inject(this);
-
+        mPresenter.loadPurchasesFromDb();
     }
 
     @Override
@@ -67,4 +71,9 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
         startActivity(intent);
     }
 
+    @Override
+    public void displayData(List<Purchase> purchases) {
+//        for (Purchase purchase: purchases)
+//            Log.e("!!!!db!!!!", purchase.getTitle());
+    }
 }

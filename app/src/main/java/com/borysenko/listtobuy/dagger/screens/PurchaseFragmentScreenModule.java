@@ -1,5 +1,6 @@
 package com.borysenko.listtobuy.dagger.screens;
 
+import com.borysenko.listtobuy.dagger.DbManagerModule;
 import com.borysenko.listtobuy.ui.main.purchasetab.PurchaseFragmentScreen;
 
 import dagger.Module;
@@ -11,7 +12,7 @@ import dagger.Provides;
  * Date: 31/01/19
  * Time: 22:21
  */
-@Module
+@Module(includes = DbManagerModule.class)
 public class PurchaseFragmentScreenModule {
     private final PurchaseFragmentScreen.View mView;
 

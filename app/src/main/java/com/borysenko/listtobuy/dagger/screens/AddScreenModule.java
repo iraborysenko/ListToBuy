@@ -1,5 +1,6 @@
 package com.borysenko.listtobuy.dagger.screens;
 
+import com.borysenko.listtobuy.dagger.DbManagerModule;
 import com.borysenko.listtobuy.ui.add.AddScreen;
 
 import dagger.Module;
@@ -11,7 +12,7 @@ import dagger.Provides;
  * Date: 31/01/19
  * Time: 23:03
  */
-@Module
+@Module(includes = DbManagerModule.class)
 public class AddScreenModule {
     private final AddScreen.View mView;
 

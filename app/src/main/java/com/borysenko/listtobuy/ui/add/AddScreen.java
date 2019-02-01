@@ -1,5 +1,7 @@
 package com.borysenko.listtobuy.ui.add;
 
+import com.borysenko.listtobuy.db.Purchase;
+
 /**
  * Created by Android Studio.
  * User: Iryna
@@ -13,5 +15,6 @@ public interface AddScreen {
 
     interface Presenter {
 
+        void addPurchaseToDb(Purchase purchase);
     }
 }

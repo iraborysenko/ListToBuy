@@ -1,5 +1,9 @@
 package com.borysenko.listtobuy.ui.main.purchasetab;
 
+import com.borysenko.listtobuy.db.Purchase;
+
+import java.util.List;
+
 /**
  * Created by Android Studio.
  * User: Iryna
@@ -9,9 +13,11 @@ package com.borysenko.listtobuy.ui.main.purchasetab;
 public interface PurchaseFragmentScreen {
     interface View {
 
+        void displayData(List<Purchase> purchases);
     }
 
     interface Presenter {
 
+        void loadPurchasesFromDb();
     }
 }

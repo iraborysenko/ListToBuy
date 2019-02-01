@@ -2,13 +2,13 @@ package com.borysenko.listtobuy.ui.add;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.borysenko.listtobuy.R;
 import com.borysenko.listtobuy.dagger.screens.AddScreenModule;
 import com.borysenko.listtobuy.dagger.screens.DaggerAddScreenComponent;
+import com.borysenko.listtobuy.db.Purchase;
 
 import javax.inject.Inject;
 
@@ -36,8 +36,11 @@ public class AddActivity extends AppCompatActivity implements AddScreen.View{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Purchase purchase = new Purchase("wwwww", "21","2","elskdfjiea334islkdf", false);
+                addPresenter.addPurchaseToDb(purchase);
+
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
     }
