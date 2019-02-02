@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.borysenko.listtobuy.R;
 import com.borysenko.listtobuy.dagger.screens.BoughtFragmentScreenModule;
@@ -63,6 +64,13 @@ public class BoughtFragment extends Fragment implements BoughtFragmentScreen.Vie
         View view = inflater.inflate(R.layout.bought_fragment, container, false);
         ButterKnife.bind(this, view);
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
+        view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
+            @Override
+            public void onWindowFocusChanged(final boolean hasFocus) {
+                mPresenter.loadBoughtsFromDb();
+            }
+        });
 
         return view;
     }

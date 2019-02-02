@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.borysenko.listtobuy.R;
 import com.borysenko.listtobuy.dagger.screens.DaggerPurchaseFragmentScreenComponent;
@@ -66,17 +67,18 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.loadPurchasesFromDb();
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.purchase_fragment, container, false);
         ButterKnife.bind(this, view);
+
+        view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
+            @Override
+            public void onWindowFocusChanged(final boolean hasFocus) {
+                mPresenter.loadPurchasesFromDb();
+            }
+        });
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
