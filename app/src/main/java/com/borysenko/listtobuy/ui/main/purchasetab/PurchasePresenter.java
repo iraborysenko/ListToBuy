@@ -1,5 +1,7 @@
 package com.borysenko.listtobuy.ui.main.purchasetab;
 
+import android.view.View;
+
 import com.borysenko.listtobuy.db.DataBaseCallBack;
 import com.borysenko.listtobuy.db.DbManager;
 import com.borysenko.listtobuy.db.Purchase;
@@ -28,6 +30,7 @@ public class PurchasePresenter implements PurchaseFragmentScreen.Presenter, Data
 
     @Override
     public void loadPurchasesFromDb() {
+
         dbManager.getAllPurchases(this);
     }
 
@@ -35,5 +38,21 @@ public class PurchasePresenter implements PurchaseFragmentScreen.Presenter, Data
     public void onUsersLoaded(List<Purchase> purchases) {
         mView.displayData(purchases);
     }
-}
 
+    void displayPurchasesOnRecyclerView(List<Purchase> purchases) {
+
+        PurchaseRecyclerAdapter mAdapter = mView.initRecyclerView(purchases);
+
+        mAdapter.setOnItemClickListener(new PurchaseRecyclerAdapter.ClickListener() {
+            @Override
+            public void onItemClick(View v) {
+
+            }
+
+            @Override
+            public void onItemLongClick(View v) {
+
+            }
+        });
+    }
+}

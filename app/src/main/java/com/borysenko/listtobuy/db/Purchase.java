@@ -2,6 +2,11 @@ package com.borysenko.listtobuy.db;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Android Studio.
@@ -73,7 +78,14 @@ public class Purchase {
         return isBought;
     }
 
-    public void setBought(Boolean bought) {
-        isBought = bought;
+    public static String bitmapToString(Bitmap in){
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        in.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        return Base64.encodeToString(bytes.toByteArray(),Base64.DEFAULT);
+    }
+
+    public static Bitmap stringToBitmap(String in){
+        byte[] bytes = Base64.decode(in, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }

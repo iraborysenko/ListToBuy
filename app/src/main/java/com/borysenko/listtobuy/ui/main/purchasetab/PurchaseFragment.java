@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Android Studio.
  * User: Iryna
@@ -33,6 +36,9 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
     PurchasePresenter mPresenter;
 
     LinearLayoutManager linearLayoutManager;
+
+    @BindView(R.id.purchase_recycler)
+    RecyclerView mRecyclerView;
 
     public PurchaseFragment() {
 
@@ -52,6 +58,7 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.purchase_fragment, container, false);
+        ButterKnife.bind(this, view);
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
@@ -73,7 +80,14 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
 
     @Override
     public void displayData(List<Purchase> purchases) {
-//        for (Purchase purchase: purchases)
-//            Log.e("!!!!db!!!!", purchase.getTitle());
+        mPresenter.displayPurchasesOnRecyclerView(purchases);
+    }
+
+    @Override
+    public PurchaseRecyclerAdapter initRecyclerView(List<Purchase> purchases) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final PurchaseRecyclerAdapter mAdapter = new PurchaseRecyclerAdapter(purchases, getContext());
+        mRecyclerView.setAdapter(mAdapter);
+        return mAdapter;
     }
 }

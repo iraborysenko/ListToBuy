@@ -1,19 +1,16 @@
 package com.borysenko.listtobuy.db;
 
-
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.borysenko.listtobuy.App;
 
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -30,13 +27,42 @@ public class DbManager {
 
     public void getAllPurchases(final DataBaseCallBack databaseCallback) {
 
-        final Disposable db = this.db.purchaseDao().getAll()
-                .subscribeOn(Schedulers.io())
+        Single<List<Purchase>> single = db.purchaseDao().getAllPurchases();
+        single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Purchase>>() {
+                .subscribe(new SingleObserver<List<Purchase>>() {
                     @Override
-                    public void accept(@NonNull List<Purchase> purchases) throws Exception {
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(List<Purchase> purchases) {
                         databaseCallback.onUsersLoaded(purchases);
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    public void getAllBoughts(final DataBaseCallBack databaseCallback) {
+
+        Single<List<Purchase>> single = db.purchaseDao().getAllBoughts();
+        single.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<Purchase>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(List<Purchase> boughts) {
+                        databaseCallback.onUsersLoaded(boughts);
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+
                     }
                 });
     }
@@ -45,7 +71,7 @@ public class DbManager {
 
         Completable.fromAction(new Action() {
             @Override
-            public void run() throws Exception {
+            public void run() {
                 purchaseDao.insert(purchase);
             }
         }).observeOn(AndroidSchedulers.mainThread())

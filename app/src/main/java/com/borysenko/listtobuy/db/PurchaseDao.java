@@ -8,7 +8,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 /**
  * Created by Android Studio.
@@ -19,11 +19,11 @@ import io.reactivex.Maybe;
 @Dao
 public interface PurchaseDao {
 
-    @Query("SELECT * FROM purchase")
-    Maybe<List<Purchase>> getAll();
+    @Query("SELECT * FROM purchase WHERE isBought = 0")
+    Single<List<Purchase>> getAllPurchases();
 
-    @Query("SELECT * FROM purchase WHERE id = :id")
-    Maybe<Purchase> getById(long id);
+    @Query("SELECT * FROM purchase WHERE isBought = 1")
+    Single<List<Purchase>> getAllBoughts();
 
     @Insert
     void insert(Purchase employee);

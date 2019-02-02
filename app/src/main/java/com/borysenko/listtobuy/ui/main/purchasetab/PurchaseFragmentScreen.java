@@ -14,6 +14,8 @@ public interface PurchaseFragmentScreen {
     interface View {
 
         void displayData(List<Purchase> purchases);
+
+        PurchaseRecyclerAdapter initRecyclerView(List<Purchase> movies);
     }
 
     interface Presenter {
