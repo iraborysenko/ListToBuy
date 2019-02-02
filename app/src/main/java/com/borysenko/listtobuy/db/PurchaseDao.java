@@ -28,9 +28,12 @@ public interface PurchaseDao {
     @Insert
     void insert(Purchase employee);
 
+    @Query("UPDATE purchase SET isBought = 1 WHERE isBought = 0")
+    void updateAllPurchases();
+
     @Update
-    void update(Purchase employee);
+    void updateSomePurchases(List<Purchase> purchasesList);
 
     @Delete
-    void delete(Purchase employee);
+    void deleteSomePurchases(List<Purchase> purchasesToDelete);
 }

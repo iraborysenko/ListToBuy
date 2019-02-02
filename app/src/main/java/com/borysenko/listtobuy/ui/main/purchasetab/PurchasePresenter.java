@@ -55,4 +55,19 @@ public class PurchasePresenter implements PurchaseFragmentScreen.Presenter, Data
             }
         });
     }
+
+    @Override
+    public void moveAllPurchases() {
+        dbManager.updateAllPurchases();
+    }
+
+    @Override
+    public void moveSomePurchases(List<Purchase> listOfPurchases) {
+        dbManager.updateSomePurchases(listOfPurchases);
+    }
+
+    @Override
+    public void deleteSomePurchases(List<Purchase> purchasesToDelete) {
+        dbManager.deleteSomePurchases(purchasesToDelete);
+    }
 }

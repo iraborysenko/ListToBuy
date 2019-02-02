@@ -21,5 +21,11 @@ public interface PurchaseFragmentScreen {
     interface Presenter {
 
         void loadPurchasesFromDb();
+
+        void moveAllPurchases();
+
+        void moveSomePurchases(List<Purchase> listOfPurchases);
+
+        void deleteSomePurchases(List<Purchase> listOfPurchases);
     }
 }

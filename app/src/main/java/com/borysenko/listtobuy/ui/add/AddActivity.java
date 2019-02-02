@@ -70,7 +70,7 @@ public class AddActivity extends AppCompatActivity implements AddScreen.View{
         String price = mPrice.getText().toString();
         String quantity = mQuantity.getText().toString();
         String title = mTitle.getText().toString();
-        return new Purchase(title,price,quantity,Purchase.bitmapToString(imageBitmap),false);
+        return new Purchase(title,price,quantity,Purchase.bitmapToString(imageBitmap));
     }
 
     @OnClick(R.id.your_image)

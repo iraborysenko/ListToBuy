@@ -25,13 +25,15 @@ public class Purchase {
     private String quantity;
     private String photoBitmap;
     private Boolean isBought;
+    private Boolean isSelected;
 
-    public Purchase(String title, String price, String quantity, String photoBitmap, Boolean isBought) {
+    public Purchase(String title, String price, String quantity, String photoBitmap) {
         this.title = title;
         this.price = price;
         this.quantity = quantity;
         this.photoBitmap = photoBitmap;
-        this.isBought = isBought;
+        this.isBought = false;
+        this.isSelected = false;
     }
 
     public int getId() {
@@ -74,8 +76,20 @@ public class Purchase {
         this.photoBitmap = photoBitmap;
     }
 
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
+
     public Boolean getBought() {
         return isBought;
+    }
+
+    public void setBought(Boolean bought) {
+        isBought = bought;
     }
 
     public static String bitmapToString(Bitmap in){

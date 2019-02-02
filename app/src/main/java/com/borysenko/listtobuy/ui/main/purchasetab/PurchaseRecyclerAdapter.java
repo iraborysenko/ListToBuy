@@ -1,7 +1,10 @@
 package com.borysenko.listtobuy.ui.main.purchasetab;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,14 +36,18 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
     private static List<Purchase> mPurchases;
     private Context mContext;
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private static FloatingActionButton fabMove;
+    private static FloatingActionButton fabMoveAll;
+    private static FloatingActionButton fabToTrash;
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
         @BindView(R.id.purchase_photo)
         ImageView mPhoto;
         @BindView(R.id.purchase_title)
         TextView mTitle;
         @BindView(R.id.purchase_price) TextView mPrice;
         @BindView(R.id.purchase_quantity) TextView mQuantity;
-
 
         ViewHolder(View v) {
             super(v);
@@ -50,19 +58,37 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
 
         @Override
         public void onClick(View v) {
+            Purchase selectedPurchase = Objects.requireNonNull(mPurchases.get(getAdapterPosition()));
+            selectedPurchase.setSelected(!selectedPurchase.getSelected());
+            selectedPurchase.setBought(!selectedPurchase.getBought());
+            v.setBackgroundColor(selectedPurchase.getSelected() ? Color.CYAN : Color.WHITE);
             clickListener.onItemClick(v);
         }
 
+        @SuppressLint("RestrictedApi")
         @Override
         public boolean onLongClick(View v) {
+            if (fabMove.getVisibility() == View.INVISIBLE) {
+                fabMove.setVisibility(View.VISIBLE);
+                fabMoveAll.setVisibility(View.VISIBLE);
+                fabToTrash.setVisibility(View.VISIBLE);
+            } else {
+                fabMove.setVisibility(View.INVISIBLE);
+                fabMoveAll.setVisibility(View.INVISIBLE);
+                fabToTrash.setVisibility(View.INVISIBLE);
+            }
             clickListener.onItemLongClick(v);
             return true;
         }
     }
 
-    PurchaseRecyclerAdapter(List<Purchase> purchases, Context context) {
+    PurchaseRecyclerAdapter(List<Purchase> purchases, Context context, FloatingActionButton mFabMove,
+                            FloatingActionButton mFabMoveAll, FloatingActionButton mFabToTrash) {
         mPurchases = purchases;
         mContext = context;
+        fabMove = mFabMove;
+        fabMoveAll = mFabMoveAll;
+        fabToTrash = mFabToTrash;
     }
 
     @NonNull
@@ -76,7 +102,7 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder movieViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder purchaseViewHolder, int i) {
 
         Purchase purchase = mPurchases.get(i);
         assert purchase != null;
@@ -88,14 +114,13 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
                 .asBitmap()
                 .load(Purchase.stringToBitmap(purchase.getPhotoBitmap()))
                 .apply(options)
-                .into(movieViewHolder.mPhoto);
+                .into(purchaseViewHolder.mPhoto);
 
-        movieViewHolder.mTitle.setText(purchase.getTitle());
-        movieViewHolder.mPrice.setText(String.format("Цена: %s", purchase.getPrice()));
-        movieViewHolder.mQuantity.setText(String.format("Количество: %s", purchase.getQuantity()));
-        movieViewHolder.itemView.setBackgroundColor(mContext.getResources()
+        purchaseViewHolder.mTitle.setText(purchase.getTitle());
+        purchaseViewHolder.mPrice.setText(String.format("Цена: %s", purchase.getPrice()));
+        purchaseViewHolder.mQuantity.setText(String.format("Количество: %s", purchase.getQuantity()));
+        purchaseViewHolder.itemView.setBackgroundColor(mContext.getResources()
                 .getColor(R.color.colorLightGrey));
-
     }
 
     @Override
@@ -111,6 +136,4 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
         void onItemClick(View v);
         void onItemLongClick(View v);
     }
-
-
 }

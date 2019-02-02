@@ -17,6 +17,7 @@ import com.borysenko.listtobuy.dagger.screens.PurchaseFragmentScreenModule;
 import com.borysenko.listtobuy.db.Purchase;
 import com.borysenko.listtobuy.ui.add.AddActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,9 +37,20 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
     PurchasePresenter mPresenter;
 
     LinearLayoutManager linearLayoutManager;
+    List<Purchase> purchasesToDelete = new ArrayList<>();
+    List<Purchase> listOfPurchases;
 
     @BindView(R.id.purchase_recycler)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.fab_add_purchase)
+    FloatingActionButton fabAdd;
+    @BindView(R.id.fab_move_purchase)
+    FloatingActionButton fabMove;
+    @BindView(R.id.fab_move_all_purchases)
+    FloatingActionButton fabMoveAll;
+    @BindView(R.id.fab_to_trash)
+    FloatingActionButton fabToTrash;
 
     public PurchaseFragment() {
 
@@ -54,6 +66,12 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.loadPurchasesFromDb();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -62,14 +80,42 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
-        FloatingActionButton fab = view.findViewById(R.id.fab_add_purchase);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openAddActivity();
             }
         });
 
+        fabMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.moveSomePurchases(listOfPurchases);
+                mPresenter.loadPurchasesFromDb();
+            }
+        });
+
+        fabMoveAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.moveAllPurchases();
+                mPresenter.loadPurchasesFromDb();
+            }
+        });
+
+        fabToTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                purchasesToDelete.clear();
+                for (Purchase purchase:listOfPurchases ) {
+                    if (purchase.getSelected()) {
+                        purchasesToDelete.add(purchase);
+                    }
+                }
+                mPresenter.deleteSomePurchases(purchasesToDelete);
+                mPresenter.loadPurchasesFromDb();
+            }
+        });
         return view;
     }
 
@@ -85,8 +131,10 @@ public class PurchaseFragment extends Fragment implements PurchaseFragmentScreen
 
     @Override
     public PurchaseRecyclerAdapter initRecyclerView(List<Purchase> purchases) {
+        listOfPurchases = purchases;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final PurchaseRecyclerAdapter mAdapter = new PurchaseRecyclerAdapter(purchases, getContext());
+        final PurchaseRecyclerAdapter mAdapter = new PurchaseRecyclerAdapter(listOfPurchases ,
+                getContext(), fabMove, fabMoveAll, fabToTrash);
         mRecyclerView.setAdapter(mAdapter);
         return mAdapter;
     }

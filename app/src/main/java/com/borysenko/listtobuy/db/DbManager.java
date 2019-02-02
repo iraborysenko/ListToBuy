@@ -90,5 +90,72 @@ public class DbManager {
         });
     }
 
+    public void updateAllPurchases() {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                db.purchaseDao().updateAllPurchases();
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+    public void updateSomePurchases(final List<Purchase> purchaseList) {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                db.purchaseDao().updateSomePurchases(purchaseList);
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+    public void deleteSomePurchases(final List<Purchase> purchasesToDelete) {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                db.purchaseDao().deleteSomePurchases(purchasesToDelete);
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
 }
