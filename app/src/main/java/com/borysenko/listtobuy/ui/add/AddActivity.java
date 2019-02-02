@@ -1,10 +1,13 @@
 package com.borysenko.listtobuy.ui.add;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +17,9 @@ import com.borysenko.listtobuy.R;
 import com.borysenko.listtobuy.dagger.screens.AddScreenModule;
 import com.borysenko.listtobuy.dagger.screens.DaggerAddScreenComponent;
 import com.borysenko.listtobuy.db.Purchase;
+
+import java.io.IOException;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -32,7 +38,8 @@ public class AddActivity extends AppCompatActivity implements AddScreen.View{
     @Inject
     AddPresenter addPresenter;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int GALLERY = 0;
+    static final int CAMERA = 1;
 
     Bitmap imageBitmap = null;
 
@@ -89,19 +96,64 @@ public class AddActivity extends AppCompatActivity implements AddScreen.View{
     }
 
     @OnClick(R.id.your_image)
-    void dispatchTakePictureIntent() {
+    void showPictureDialog(){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Выберите действие");
+        String[] pictureDialogItems = {
+                "GALLERY",
+                "CAMERA" };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallery();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (galleryIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(galleryIntent, GALLERY);
+        }
+    }
+
+    private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, CAMERA);
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            assert extras != null;
-            imageBitmap = (Bitmap) extras.get("data");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    mPhoto.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 360, false));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else if (requestCode == CAMERA) {
+            imageBitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             assert imageBitmap != null;
             mPhoto.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 300, 360, false));
         }
