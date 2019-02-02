@@ -76,25 +76,27 @@ public class BoughtRecyclerAdapter extends RecyclerView.Adapter<BoughtRecyclerAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder movieViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder boughtViewHolder, int i) {
 
         Purchase purchase = mBoughts.get(i);
         assert purchase != null;
 
         RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.no_image)
+                .error(R.drawable.no_image)
                 .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         Glide.with(mContext)
                 .asBitmap()
                 .load(Purchase.stringToBitmap(purchase.getPhotoBitmap()))
                 .apply(options)
-                .into(movieViewHolder.mPhoto);
+                .into(boughtViewHolder.mPhoto);
 
-        movieViewHolder.mTitle.setText(purchase.getTitle());
-        movieViewHolder.mPrice.setText(String.format("Цена: %s", purchase.getPrice()));
-        movieViewHolder.mQuantity.setText(String.format("Количество: %s", purchase.getQuantity()));
-        movieViewHolder.itemView.setBackgroundColor(mContext.getResources()
-                .getColor(R.color.colorLightGrey));
+        boughtViewHolder.mTitle.setText(purchase.getTitle());
+        boughtViewHolder.mPrice.setText(String.format("Цена: %s", purchase.getPrice()));
+        boughtViewHolder.mQuantity.setText(String.format("Количество: %s", purchase.getQuantity()));
+        boughtViewHolder.itemView.setBackgroundColor(mContext.getResources()
+                .getColor(R.color.colorOfBoughtItems));
 
     }
 
@@ -111,6 +113,4 @@ public class BoughtRecyclerAdapter extends RecyclerView.Adapter<BoughtRecyclerAd
         void onItemClick(View v);
         void onItemLongClick(View v);
     }
-
-
 }

@@ -51,6 +51,12 @@ public class BoughtFragment extends Fragment implements BoughtFragmentScreen.Vie
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.loadBoughtsFromDb();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 

@@ -2,7 +2,6 @@ package com.borysenko.listtobuy.ui.main.purchasetab;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,7 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
 
     private static ClickListener clickListener;
     private static List<Purchase> mPurchases;
-    private Context mContext;
+    private static Context mContext;
 
     private static FloatingActionButton fabMove;
     private static FloatingActionButton fabMoveAll;
@@ -61,7 +60,9 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
             Purchase selectedPurchase = Objects.requireNonNull(mPurchases.get(getAdapterPosition()));
             selectedPurchase.setSelected(!selectedPurchase.getSelected());
             selectedPurchase.setBought(!selectedPurchase.getBought());
-            v.setBackgroundColor(selectedPurchase.getSelected() ? Color.CYAN : Color.WHITE);
+            v.setBackgroundColor(selectedPurchase.getSelected() ? mContext.getResources()
+                    .getColor(R.color.colorSelection) : mContext.getResources()
+                    .getColor(R.color.colorLightGrey));
             clickListener.onItemClick(v);
         }
 
@@ -108,6 +109,8 @@ public class PurchaseRecyclerAdapter extends RecyclerView.Adapter<PurchaseRecycl
         assert purchase != null;
 
         RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.no_image)
+                .error(R.drawable.no_image)
                 .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         Glide.with(mContext)

@@ -67,10 +67,25 @@ public class AddActivity extends AppCompatActivity implements AddScreen.View{
     }
 
     private Purchase collectData() {
-        String price = mPrice.getText().toString();
-        String quantity = mQuantity.getText().toString();
-        String title = mTitle.getText().toString();
-        return new Purchase(title,price,quantity,Purchase.bitmapToString(imageBitmap));
+        String price = "";
+        if (mPrice.getText()!=null) {
+            price = mPrice.getText().toString();
+        }
+
+        String quantity = "";
+        if (mQuantity.getText()!=null) {
+            quantity = mQuantity.getText().toString();
+        }
+        String title = "";
+        if (mTitle.getText()!=null) {
+            title = mTitle.getText().toString();
+        }
+
+        String pictureBitmap="";
+        if (imageBitmap!=null) {
+            pictureBitmap = Purchase.bitmapToString(imageBitmap);
+        }
+        return new Purchase(title,price,quantity,pictureBitmap);
     }
 
     @OnClick(R.id.your_image)
