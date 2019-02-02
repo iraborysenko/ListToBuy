@@ -9,4 +9,5 @@
     <string name="enter_price">Введите цену</string>
     <string name="enter_quantity">Введите количество</string>
     <string name="photo_of_purchase">Photo of purchase</string>
+    <string name="tips">Подсказка</string>
 </resources>
